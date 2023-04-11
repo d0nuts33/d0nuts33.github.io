@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>d0nuts - Do not learn to hack, just hack to learn</title><meta name="author" content="d0nuts"><meta name="copyright" content="d0nuts"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="平平无奇">
+<meta property="og:type" content="website">
+<meta property="og:title" content="d0nuts">
+<meta property="og:url" content="http://127.0.0.1:4000/index.html">
+<meta property="og:site_name" content="d0nuts">
+<meta property="og:description" content="平平无奇">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://127.0.0.1:4000/img/avatar4.jpg">
+<meta property="article:author" content="d0nuts">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://127.0.0.1:4000/img/avatar4.jpg"><link rel="shortcut icon" href="/img/avatar4.jpg"><link rel="canonical" href="http://127.0.0.1:4000/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'd0nuts',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-04-11 21:22:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar4.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/img/Shooting-star-%5BYuru-Camp%5D.jpg')"><nav id="nav"><span id="blog-info"><a href="index.html" title="d0nuts"><span class="site-name">d0nuts</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">d0nuts</h1><div id="site-subtitle"><span id="subtitle"></span></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="2023/03/29/ijm%E5%8A%A0%E5%9B%BA%E5%8F%8Dfrida%E5%88%86%E6%9E%90/" title="ijm加固反frida分析">ijm加固反frida分析</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-29T14:40:44.000Z" title="发表于 2023-03-29 22:40:44">2023-03-29</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-11T00:34:24.019Z" title="更新于 2023-04-11 08:34:24">2023-04-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="categories/Android%E5%8A%A0%E5%9B%BA%E5%88%86%E6%9E%90/">Android加固分析</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="tags/anti-debug/">anti-debug</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="tags/anti-frida/">anti-frida</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="tags/%E6%A8%A1%E6%8B%9F%E5%99%A8%E6%A3%80%E6%B5%8B/">模拟器检测</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="tags/anti-xposed/">anti-xposed</a></span></div><div class="content">简单分析一下，着重分析它的反调试、模拟器检测、xposed 家族检测和 frida 检测，最后给出绕过frida检测的方法</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="2023/02/25/zygisk%E5%8E%9F%E7%90%86/" title="zygisk注入原理">zygisk注入原理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-25T01:06:52.000Z" title="发表于 2023-02-25 09:06:52">2023-02-25</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-11T00:32:29.318Z" title="更新于 2023-04-11 08:32:29">2023-04-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="categories/Android%E9%80%86%E5%90%91/">Android逆向</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="tags/magisk/">magisk</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="tags/lsposed/">lsposed</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="tags/zygisk/">zygisk</a></span></div><div class="content">最近用上了 lsposed ，发现使用它做开发不用重启手机就能应用新代码，相比 xposed 方便多了，lsposed 又是基于 zygisk 做注入，于是决定来了解一下它的注入原理。阅读下面这几篇文章了解了 magisk 的原理以及 zygisk 的注入原理，知识点又干又硬，根据个人的理解梳理一下，分析的 magisk 版本是 v25.2
+
+
+云手机底层技术揭密 : Android系统启动与Magisk原理
+Zygisk 源码分析
+zygisk原理简单分析和以及zygisk插件开发(1)
+zygisk原理简单分析和以及zygisk插件开发(2)
+
+
+
+
+Magisk原理
+先从 Magisk 出发，回忆一下 magisk root 的一种方式是在 magisk app 中选择 patch boot.img 文件，结束后拿到 boot.img 重新烧写就完成 root 了。在了解 magisk 对 boot.img 做了什么操作前先回顾 Android 系统的启动流程（截取图片来自Lsposed 技术原理探讨 &amp;&amp; 基本安装使用）：
+
+当系统正常加载时 bootloade ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="2023/02/25/%E6%9F%90%E8%81%8A%E5%A4%A9app%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%A4%B4%E5%83%8Furl%E5%88%86%E6%9E%90/" title="某聊天app获取用户头像url分析">某聊天app获取用户头像url分析</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-25T01:02:19.000Z" title="发表于 2023-02-25 09:02:19">2023-02-25</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-11T00:35:29.524Z" title="更新于 2023-04-11 08:35:29">2023-04-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="categories/Android%E9%80%86%E5%90%91/">Android逆向</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="tags/%E6%8A%93%E5%8C%85/">抓包</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="tags/%E5%8D%8F%E8%AE%AE%E5%88%86%E6%9E%90/">协议分析</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="tags/frida/">frida</a></span></div><div class="content">分析一个海外 app，目标是找到 app 发送获取用户头像请求接口并用 frida 实现主动调用</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="2023/02/21/%E9%9D%9E%E5%B9%B3%E5%9D%A6%E5%8C%96%E6%B7%B7%E6%B7%86%E6%80%BB%E7%BB%93/" title="非平坦化混淆总结">非平坦化混淆总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-21T13:31:12.000Z" title="发表于 2023-02-21 21:31:12">2023-02-21</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-11T00:36:13.091Z" title="更新于 2023-04-11 08:36:13">2023-04-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="categories/Android%E5%8A%A0%E5%9B%BA%E5%88%86%E6%9E%90/">Android加固分析</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="tags/%E6%B7%B7%E6%B7%86/">混淆</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="tags/ida/">ida</a></span></div><div class="content">整理那些见过的非平坦化、非 bcf 混淆，以后见到新的再添加进来</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="2023/02/19/%E5%AD%97%E8%8A%82%E7%B3%BBapp%E6%8A%93%E5%8C%85/" title="字节系app抓包">字节系app抓包</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-19T15:53:31.000Z" title="发表于 2023-02-19 23:53:31">2023-02-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-11T00:28:46.177Z" title="更新于 2023-04-11 08:28:46">2023-04-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="categories/Android%E9%80%86%E5%90%91/">Android逆向</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="tags/%E6%8A%93%E5%8C%85/">抓包</a></span></div><div class="content">抓今日头条包（版本9.1.6），发现各种抓不到，最后找到个脚本 hook 它在 java 层的收发包函数，也算是一种抓包方式。</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="2023/01/16/Android%E6%8A%93%E5%8C%85%E5%AF%B9%E6%8A%97%E6%80%BB%E7%BB%93/" title="Android抓包对抗总结">Android抓包对抗总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-01-16T12:33:22.000Z" title="发表于 2023-01-16 20:33:22">2023-01-16</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-11T00:32:13.919Z" title="更新于 2023-04-11 08:32:13">2023-04-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="categories/Android%E9%80%86%E5%90%91/">Android逆向</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="tags/%E6%8A%93%E5%8C%85/">抓包</a></span></div><div class="content">总结 Android 下的抓包对抗，方便下次做协议分析时翻出来看，算是个学习笔记，所以没什么新东西。</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="2022/12/28/%E7%BC%96%E8%AF%91Android%E5%86%85%E6%A0%B8%E5%88%9D%E6%AD%A5%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/" title="编译Android内核初步绕过反调试">编译Android内核初步绕过反调试</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-12-28T10:43:04.000Z" title="发表于 2022-12-28 18:43:04">2022-12-28</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-10T14:08:23.861Z" title="更新于 2023-04-10 22:08:23">2023-04-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="categories/Android%E9%80%86%E5%90%91/">Android逆向</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="tags/anti-debug/">anti-debug</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a></span></div><div class="content">老早就想用改源码的方式绕过 tracepid 这类反调试检测，以前试过 patch boot.img 也没成功，凑巧最近编译 aosp 源码做脱壳机，就顺便把内核也改掉。主要参考这篇文章：
+
+native层安卓_来自高纬的对抗：定制安卓内核过反调试
+
+
+
+编译环境
+设备：Pixel系统：Android 8.1.0架构：arm64-v8a编译机：Ubuntu 18
+编译内核源码
+下载内核源码
+12$ git clone https://aosp.tuna.tsinghua.edu.cn/android/kernel/msm.git$ cd msm
+
+手机 adb shell 执行 cat /proc/version 查看内核版本
+
+检出对应版本代码
+1$ git checkout 520f6eb
+准备编译环境变量，编译工具链在 aosp 源码中有，如果之前同步过 aosp ，那么这里直接用就行
+123$ export PATH=$PATH:/home/&lt;user&gt;/Downloads/aosp/prebuilts/gcc/linux-x86/aarch64/aarch64-l ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="2022/11/25/archlinux%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%90%AD%E5%BB%BAandroid%E9%80%86%E5%90%91%E7%8E%AF%E5%A2%83/" title="Archlinux虚拟机搭建Android逆向环境">Archlinux虚拟机搭建Android逆向环境</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-11-25T11:54:09.000Z" title="发表于 2022-11-25 19:54:09">2022-11-25</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-10T16:04:40.800Z" title="更新于 2023-04-11 00:04:40">2023-04-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="categories/Android%E9%80%86%E5%90%91/">Android逆向</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a></span></div><div class="content">r0env 作为 android 逆向环境已经相当完美了，之所以还要折腾 Archlinux 搭建新环境只是觉得 kali 上自带的各种渗透工具都是我不需要的，而我这种洁癖无法忍受这一点，于是找到这个最干净（可能）的 linux 系统，从零开始搭建，同时整理出这篇备忘文章。
+
+
+
+前期配置
+首先从官网下载镜像，找到 China 那块随便找一个仓库下就行：iso下载地址创建虚拟机没什么好说的，操作系统版本选择”其他Linux”，硬盘大小给的 70G ，网络适配器选择 NAT（桥接也行，需要配置一下静态 ip ），然后创建完成后进入虚拟机设置-&gt;选项-&gt;高级-&gt;固件类型选择UEFI
+
+系统安装
+开始安装系统，进入到 shell 界面后发现无法复制粘贴指令，使用宿主机的 cmder 自带的 ssh 连进虚拟机，先敲 passwd root 修改 root 的密码，然后敲 ip addr 命令查看自动分配的 ip ，最后再在 cmder 敲 ssh root@&lt;your-ip&gt;
+分区创建分区的过程参考：2021年vmware安装archlinux我自己创建了三个分 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="2022/11/24/bangbang%E5%8A%A0%E5%9B%BA%E4%BC%81%E4%B8%9A%E7%89%88%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%8B%EF%BC%89/" title="bangbang加固企业版分析（下）">bangbang加固企业版分析（下）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-11-24T12:39:27.000Z" title="发表于 2022-11-24 20:39:27">2022-11-24</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-11T00:37:05.343Z" title="更新于 2023-04-11 08:37:05">2023-04-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="categories/Android%E5%8A%A0%E5%9B%BA%E5%88%86%E6%9E%90/">Android加固分析</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="tags/VMP/">VMP</a></span></div><div class="content">接着上文的 bb 加固分析，接下来要去弄明白它的 VMP 指令如何执行的</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="2022/11/07/bangbang%E5%8A%A0%E5%9B%BA%E4%BC%81%E4%B8%9A%E7%89%88%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%8A%EF%BC%89/" title="bangbang加固企业版分析（上）">bangbang加固企业版分析（上）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-11-07T05:06:03.000Z" title="发表于 2022-11-07 13:06:03">2022-11-07</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-11T00:38:08.324Z" title="更新于 2023-04-11 08:38:08">2023-04-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="categories/Android%E5%8A%A0%E5%9B%BA%E5%88%86%E6%9E%90/">Android加固分析</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="tags/OLLVM%E6%B7%B7%E6%B7%86/">OLLVM混淆</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="tags/anti-debug/">anti-debug</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="tags/anti-frida/">anti-frida</a></span></div><div class="content">阅读了看雪上一篇对 android VMP 壳的反混淆思路文章，对于壳的功能作者并没有进行详细的阐述，看后感觉意犹未尽，而且这家厂商的壳分析文章在网上挺多的，以前简单分析过它的免费版，这次正好拿来作为 VMP 壳入门。因为内容过多，需要分为上下两篇</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="page/2/#content-inner">2</a><a class="extend next" rel="next" href="page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar4.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">d0nuts</div><div class="author-info__description">平平无奇</div></div><div class="card-info-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/d0nuts33"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">联系邮箱：851769736@qq.com 直接加q也行</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="2023/03/29/ijm%E5%8A%A0%E5%9B%BA%E5%8F%8Dfrida%E5%88%86%E6%9E%90/" title="ijm加固反frida分析">ijm加固反frida分析</a><time datetime="2023-03-29T14:40:44.000Z" title="发表于 2023-03-29 22:40:44">2023-03-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="2023/02/25/zygisk%E5%8E%9F%E7%90%86/" title="zygisk注入原理">zygisk注入原理</a><time datetime="2023-02-25T01:06:52.000Z" title="发表于 2023-02-25 09:06:52">2023-02-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="2023/02/25/%E6%9F%90%E8%81%8A%E5%A4%A9app%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%A4%B4%E5%83%8Furl%E5%88%86%E6%9E%90/" title="某聊天app获取用户头像url分析">某聊天app获取用户头像url分析</a><time datetime="2023-02-25T01:02:19.000Z" title="发表于 2023-02-25 09:02:19">2023-02-25</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="categories/Android%E5%8A%A0%E5%9B%BA%E5%88%86%E6%9E%90/"><span class="card-category-list-name">Android加固分析</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="categories/Android%E9%80%86%E5%90%91/"><span class="card-category-list-name">Android逆向</span><span class="card-category-list-count">6</span></a></li>
+            </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">11</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">20.3k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-04-11T13:22:12.344Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By d0nuts</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="js/utils.js"></script><script src="js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: (str) => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: (subtitleType) => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        getScript('https://cdn.jsdelivr.net/npm/typed.js/lib/typed.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  }
+}
+</script><script>function subtitleType () {
+  if (true) {
+    typedJSFn.init(["Do not learn to hack, just hack to learn"])
+  } else {
+    document.getElementById("subtitle").innerHTML = 'Do not learn to hack, just hack to learn'
+  }
+}
+typedJSFn.run(subtitleType)</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div><script src="js/search/local-search.js"></script></div></body></html>

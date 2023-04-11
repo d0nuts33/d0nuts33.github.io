@@ -1,0 +1,278 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>bangbang加固企业版分析（下） | d0nuts</title><meta name="author" content="d0nuts"><meta name="copyright" content="d0nuts"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="接着上文的 bb 加固分析，接下来要去弄明白它的 VMP 指令如何执行的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bangbang加固企业版分析（下）">
+<meta property="og:url" content="http://127.0.0.1:4000/2022/11/24/bangbang%E5%8A%A0%E5%9B%BA%E4%BC%81%E4%B8%9A%E7%89%88%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%8B%EF%BC%89/index.html">
+<meta property="og:site_name" content="d0nuts">
+<meta property="og:description" content="接着上文的 bb 加固分析，接下来要去弄明白它的 VMP 指令如何执行的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://127.0.0.1:4000/img/avatar4.jpg">
+<meta property="article:published_time" content="2022-11-24T12:39:27.000Z">
+<meta property="article:modified_time" content="2023-04-11T00:37:05.343Z">
+<meta property="article:author" content="d0nuts">
+<meta property="article:tag" content="VMP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://127.0.0.1:4000/img/avatar4.jpg"><link rel="shortcut icon" href="../../../../img/avatar4.jpg"><link rel="canonical" href="http://127.0.0.1:4000/2022/11/24/bangbang%E5%8A%A0%E5%9B%BA%E4%BC%81%E4%B8%9A%E7%89%88%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%8B%EF%BC%89/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'bangbang加固企业版分析（下）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-11 08:37:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar4.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('../../../../img/Yuru-Camp.jpg')"><nav id="nav"><span id="blog-info"><a href="index.html" title="d0nuts"><span class="site-name">d0nuts</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">bangbang加固企业版分析（下）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-11-24T12:39:27.000Z" title="发表于 2022-11-24 20:39:27">2022-11-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-11T00:37:05.343Z" title="更新于 2023-04-11 08:37:05">2023-04-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/Android%E5%8A%A0%E5%9B%BA%E5%88%86%E6%9E%90/">Android加固分析</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>接着上文的 bb 加固分析，接下来要去弄明白它的 VMP 指令如何执行的。</p>
+<span id="more"></span>
+
+<h1 id="分析环境"><a href="#分析环境" class="headerlink" title="分析环境"></a>分析环境</h1><hr>
+<p>设备：Nexus 5<br>系统：Android 6<br>架构：armeabi-v7a<br><br></p>
+<h1 id="Java层vmp入口"><a href="#Java层vmp入口" class="headerlink" title="Java层vmp入口"></a>Java层vmp入口</h1><hr>
+<p>bb 加固的 VMP 属于 <code>DEX-VMP</code> ，原理大致是：</p>
+<ul>
+<li>修改 java 函数为 native ，vmp 实现在 native 层</li>
+<li>执行时获取 java 函数对应的 codeitem ，获取参数信息，为参数的存放分配内存空间</li>
+<li>找到 java 方法对应的 vmp 指令传入 vmpEntry 解析执行</li>
+<li>在有需要调用 java 层函数的地方使用 jni 调用方式实现</li>
+</ul>
+<p>详细的内容可以参考<a target="_blank" rel="noopener" href="https://geneblue.github.io/2019/09/13/android/sec--android-dex-vmp/">Android DEX-VMP 虚拟保护技术</a></p>
+<p>根据上篇的分析 dump 出所有 dex 再合并成 apk 后再反编译，找到针对不同返回类型的 vmp 入口方法</p>
+<p><img src="01.jpg"></p>
+<p>vmp 的实现都在 libdexjni.so，因为要跑完 libDexHelper.so ，libdexjni.so 才会加载，而 libDexHelper 中又有内存解密和反调试，每次都手动绕过非常麻烦，所以为了方便动态调试，需要写 python 脚本辅助断到 libdexjni 的 JNI_OnLoad 。在上篇讲过 0x2A142 处的 <code>BLX R5</code> 指令会去执行反调试函数，里面都是扎堆的反调试逻辑，经过我的测试，只要把这段指令 <code>nop</code> 掉就能绕过反调试。<br>写一个继承自 idaapi.DBG_Hooks 的类，当 libDexHelper.so 加载时，在 init 函数结尾的地址下断点，获取然后 F9 执行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">dbg_library_load</span>(<span class="params">self, pid, tid, ea, name, base, size</span>):</span><br><span class="line">    <span class="keyword">if</span> name.find(self._target_library) != -<span class="number">1</span>:</span><br><span class="line">        ...</span><br><span class="line">    <span class="keyword">elif</span> name.find(<span class="string">&#x27;libDexHelper.so&#x27;</span>) != -<span class="number">1</span>:</span><br><span class="line">        self._helper_init = <span class="number">0xD06A8</span> + base          </span><br><span class="line">        self._helper_anti_dbg = <span class="number">0x2A142</span> + base      <span class="comment"># 反调试指令的地址</span></span><br><span class="line">        add_bpt(self._helper_init, <span class="number">0</span>, BPT_SOFT)     <span class="comment"># 在init函数结尾的地址下断点</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;add bp on: &#x27;</span> + <span class="built_in">hex</span>(self._helper_init))</span><br><span class="line">        self.fn_f9()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        self.fn_f9()</span><br></pre></td></tr></table></figure>
+<p>运行到 init 函数结尾说明 JNI_OnLoad 已经被解密出来，那么在反调试指令的前一条指令下断点然后继续执行，断下后可以把反调试指令 patch 掉</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">dbg_bpt</span>(<span class="params">self, tid, ea</span>):</span><br><span class="line">    <span class="keyword">if</span> ea == self._helper_init:</span><br><span class="line">        del_bpt(ea)</span><br><span class="line">        add_bpt(self._helper_anti_dbg - <span class="number">2</span>, <span class="number">0</span>, BPT_SOFT) <span class="comment"># 断到反调试指令的前一条指令</span></span><br><span class="line">        self.fn_f9()</span><br><span class="line">    <span class="keyword">if</span> ea == self._helper_anti_dbg - <span class="number">2</span>:</span><br><span class="line">        idc.patch_word(self._helper_anti_dbg, <span class="number">0xBF00</span>)   <span class="comment"># 把反调试patch掉</span></span><br><span class="line">        del_bpt(ea)</span><br><span class="line">        self.fn_f9()</span><br></pre></td></tr></table></figure>
+<p>继续执行 libdexjni.so 就被加载了，然后跟 libDexHelper.so 一样在 init 下断点等待 JNI_OnLoad 解密完成，执行过去就可以了</p>
+<h1 id="JNI-OnLoad"><a href="#JNI-OnLoad" class="headerlink" title="JNI_OnLoad"></a>JNI_OnLoad</h1><hr>
+<p>libdexjni 同样实现了 init 函数，跟上篇的 libDexHelper 一样解密 JNI_OnLoad ，这里就不细说了，dump 后直接看 JNI_OnLoad</p>
+<p><img src="02.jpg"></p>
+<p>伪代码中的部分函数调用被我重命名成 “jmp_xxx”，这些函数中的指令都是下图中这种取地址然后赋值给 PC 的强制跳转</p>
+<p><img src="03.jpg"></p>
+<p>JNI_OnLoad 前三个 jmp_xxx 函数解密 vmp 执行所需的指令及解密指令的 key ，进入 jmp_e0c8 函数看看，这里面首先是调用 sub_E368 反射获取 java 类及 methodId ，并把它们保存到全局变量上</p>
+<p><img src="04.jpg"></p>
+<p>接着注册 <code>com.fort.andjni.JniLib</code> 的所有 native 方法，后面以 cV 函数为例</p>
+<p><img src="05.jpg"><br><img src="06.jpg"></p>
+<h1 id="cV函数"><a href="#cV函数" class="headerlink" title="cV函数"></a>cV函数</h1><hr>
+<p>cV 函数被注册到 sub_1416c ，看来 libdexjni 中也有 OLLVM</p>
+<p><img src="07.jpg"></p>
+<p>通过 trace 来到关键点 0x142A0 ，这里首先使用 jni 函数获取 cV 函数的最后一个参数，它是一个结构体数组的索引值，在 0x142C8 处调用函数计算并返回结构体地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">seg000:000142A0 180 30 68                   LDR             R0, [R6]</span><br><span class="line">seg000:000142A2 180 51 46                   MOV             R1, R10</span><br><span class="line">seg000:000142A4 180 D0 F8 AC 22             LDR.W           R2, [R0,#0x2AC]</span><br><span class="line">seg000:000142A8 180 30 46                   MOV             R0, R6</span><br><span class="line">seg000:000142AA 180 90 47                   BLX             R2                      ; GetArrayLength</span><br><span class="line">seg000:000142AC 180 31 68                   LDR             R1, [R6]</span><br><span class="line">seg000:000142AE 180 42 1E                   SUBS            R2, R0, #1</span><br><span class="line">seg000:000142B0 180 30 46                   MOV             R0, R6</span><br><span class="line">seg000:000142B2 180 01 92                   STR             R2, [SP,#0x180+var_17C]</span><br><span class="line">seg000:000142B4 180 D1 F8 B4 32             LDR.W           R3, [R1,#0x2B4]</span><br><span class="line">seg000:000142B8 180 51 46                   MOV             R1, R10</span><br><span class="line">seg000:000142BA 180 98 47                   BLX             R3                      ; 调用GetObjectArrayElement获取最后一个参数，这是一个索引值</span><br><span class="line">seg000:000142BC 180 D7 F8 B4 21             LDR.W           R2, [R7,#0x1B4]         ; method_id_intValue</span><br><span class="line">seg000:000142C0 180 01 46                   MOV             R1, R0</span><br><span class="line">seg000:000142C2 180 30 46                   MOV             R0, R6</span><br><span class="line">seg000:000142C4 180 F4 F7 70 EA             BLX             sub_87A8                ; _JNIEnv::CallIntMethod(_jobject *,_jmethodID *,...)</span><br><span class="line">seg000:000142C8 180 F4 F7 44 EA             BLX             j_153f0                 ; intValue返回值做下标从int型数组上取值</span><br><span class="line">seg000:000142CC 180 00 90                   STR             R0, [SP,#0x180+var_180]</span><br></pre></td></tr></table></figure>
+<p>这里是根据 java 层传入的 <code>vmpId</code> 参数值来索引这块内存，结构体的定义如下图，将其称为 <code>vmpInfo</code> ，结构体第一个字段和传入的索引值相同，大胆猜测它是 vmpId ，第三个字段 <code>codeItem</code> 怎么来的？</p>
+<p><img src="08.jpg"></p>
+<h2 id="找到codeItem"><a href="#找到codeItem" class="headerlink" title="找到codeItem"></a>找到codeItem</h2><p>假设现在不知道 vmpInfo 结构体的具体定义，分析过程中遇到一块内存，不知道它的意义是很常见的事，我们要做的就是先放下往后看，然后倒推它的字段，有两篇文章值得参考<br></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-257061-1.htm">某企业级加固[四代壳]VMP解释执行+指令还原</a><br><a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-270799-1.htm">某DEX_VMP安全分析与还原</a></p>
+</blockquote>
+<p>前辈的思路就是根据 VMP-DEX 的特点断点 <code>jni</code> 函数，比如 <code>FindClass</code> ，然后倒推代码逻辑</p>
+<p><img src="09.jpg"></p>
+<p>断下 FindClass 看到它在找 <code>java/lang/Object</code> 类，jni 函数一般会由 vmpEntry 调用，所以此时的 LR 保存的地址属于 vmpEntry 函数的地址空间，顺着 LR 找到 vmpEntry 函数开头，偏移为 0x1D0B0</p>
+<p><img src="10.jpg"></p>
+<p>现在要做的是往 vmpEntry 函数开头方向追踪 FindClass 参数是怎么来的，为了方便分析需要用到上篇分析文章中的 trace 脚本，跟踪 vmpEntry 的执行并输出日志，R1 寄存器保存字符串地址，可以看到值来自 [[SP, #0x950]]</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(        libdexjni.so[0x9BF6663C])0x0002163C: LDR.W           R1, [SP,#0x950]</span><br><span class="line">(        libdexjni.so[0x9BF66640])0x00021640: LDR             R2, [R0]</span><br><span class="line">(        libdexjni.so[0x9BF66642])0x00021642: LDR             R1, [R1]                                              </span><br><span class="line">(        libdexjni.so[0x9BF66644])0x00021644: LDR             R2, [R2,#0x18]                                        </span><br><span class="line">(        libdexjni.so[0x9BF66646])0x00021646: BLX             R2                ; FindClass</span><br></pre></td></tr></table></figure>
+
+<p>使用 trace 日志分析的一个好处就是能直接搜索 <code>[SP, #0x950]</code> ，看哪里对它赋值了，来到 0x3A942 调用函数后返回值赋值，理论上跟入这个函数看是哪里赋值 R0 即可，这里不展开了，函数内是从 <code>([GOT + 0xD8370 + 0xC] + R1 &lt;&lt; 2)</code> 地址上取出字符串，R1 即是 sub_9BF4DB14 的第二个参数，而 R1 在 0x3A93C 处被赋值，这是个关键值，因为它指导 sub_9BF4DB14 获取字符串，是个字符串索引</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(        libdexjni.so[0x9BF7F93C])0x0003A93C: LDR.W           R1, [SP,#0x9A4]</span><br><span class="line">(        libdexjni.so[0x9BF7F940])0x0003A940: MOV             R0, R4         </span><br><span class="line">(        libdexjni.so[0x9BF7F942])0x0003A942: BLX             sub_9BF4DB14   </span><br><span class="line">(        libdexjni.so[0x9BF7F946])0x0003A946: STR.W           R0, [SP,#0x950]</span><br></pre></td></tr></table></figure>
+
+<p>继续往上追踪 <code>[SP,#0x9A4]</code> ，方法类似，这里直接给出结果：<code>字符串索引 = [[[R0]] + 2]</code> ，R0 是 vmpEntry 的第一个参数，又因为 insn 会指导程序到某处获取字符串，即字符串索引就在 insn 中，进一步可得 vmpEntry 的第一个参数就是 insn 的地址，指令是 <code>00 10 CB 28 00 00 47 00</code> ，往前偏移 16 字节是 codeItem 为 <code>01 00 01 00 01 00 00 00  16 38 09 00 04 00 00 00</code></p>
+<p><img src="11.jpg"></p>
+<p>看到 codeItem 最后 4 字节是 <code>04 00 00 00</code> ，对照 codeItem 结构体说明 insnsSize 为 4 ，即共有 4 条指令</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">CodeItem</span> &#123;</span></span><br><span class="line">    uint16  registersSize;   </span><br><span class="line">    uint16  insSize;           </span><br><span class="line">    uint16  outsSize;</span><br><span class="line">    uint16  triesSize;</span><br><span class="line">    uint32  debugInfoOff;       </span><br><span class="line">    uint32  insnsSize;</span><br><span class="line">    uint16  insns[<span class="number">1</span>]; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>回到 sub_1416c ，在 0x14642 处调用函数进入 vmpEntry ，向上找 R0 的赋值，最后发现它来自 vmpInfo 结构体，偏移为 0x8 ，这就是通过回溯法推断出了 vmpInfo 上的 codeItem 字段</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(        libdexjni.so[0x9BF192CC])0x000142CC: STR             R0, [SP]              ; 保存vmpInfo</span><br><span class="line">...</span><br><span class="line">(        libdexjni.so[0x9BF1933A])0x0001433A: LDR             R1, [SP]              ; 取出vmpInfo</span><br><span class="line">...</span><br><span class="line">(        libdexjni.so[0x9BF19352])0x00014352: LDR             R0, [R1,#8]           ; vmpInfo偏移8字节处取出codeItem</span><br><span class="line">(        libdexjni.so[0x9BF19354])0x00014354: STR             R0, [SP,#0x13C]       ; 保存codeItem                            </span><br><span class="line">...</span><br><span class="line">(        libdexjni.so[0x9BF1962E])0x0001462E: LDR             R0, [SP,#0x13C]       ; 取出codeItem</span><br><span class="line">(        libdexjni.so[0x9BF19630])0x00014630: LDR             R1, [SP,#0x148] </span><br><span class="line">(        libdexjni.so[0x9BF19632])0x00014632: STR             R1, [R5,#0x1C]  </span><br><span class="line">(        libdexjni.so[0x9BF19634])0x00014634: ADDS            R0, #0x10       </span><br><span class="line">(        libdexjni.so[0x9BF19636])0x00014636: STR             R0, [R5]              ; insn保存到一个内存上</span><br><span class="line">(        libdexjni.so[0x9BF19638])0x00014638: ADD             R1, SP, #0x130  </span><br><span class="line">(        libdexjni.so[0x9BF1963A])0x0001463A: LDR             R4, [SP,#0x28]  </span><br><span class="line">(        libdexjni.so[0x9BF1963C])0x0001463C: MOV             R0, R5          </span><br><span class="line">(        libdexjni.so[0x9BF1963E])0x0001463E: LDR             R3, [SP,#0x154] </span><br><span class="line">(        libdexjni.so[0x9BF19640])0x00014640: MOV             R2, R4          </span><br><span class="line">(        libdexjni.so[0x9BF19642])0x00014642: BLX             sub_9BF0D730          ; vmpEntry</span><br></pre></td></tr></table></figure>
+
+<h2 id="指令分析"><a href="#指令分析" class="headerlink" title="指令分析"></a>指令分析</h2><p>接下来要分析指令，若能看到寄存器的值会方便很多，所以重新修改 trace 脚本把寄存器值打印出来（像下面展示的汇编后面的D表示目的寄存器的值，S 表示源寄存器的值），然后搜索 insn 第一条指令 0x1000，能看到对它做了异或操作得到 0x1089 ，接着计算出跳转地址并跳转过去，往下就分别调用 FindClass 、GetMethodID 和 CallNonvirtualVoidMethodA ，所以 insn 前两个字节 0x1000 用于计算跳转 handle 的地址，而 0x28CB 是索引字符串的操作数，它就是传给 sub_9BF4DB14 的参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(        libdexjni.so[0x9BEDF2CC])0x0002C2CC: LDRH            R6, [R6]                                              D: [R6: 0xB399E3B8] S: [R6: 0xB399E3B8]         ; 取insn前两字节</span><br><span class="line">(        libdexjni.so[0x9BEDF2CE])0x0002C2CE: ADD             R0, PC; _GLOBAL_OFFSET_TABLE_                         D: [R0: 0x3289E] S: [PC: 0x9BEDF2CE]</span><br><span class="line">(        libdexjni.so[0x9BEDF2D0])0x0002C2D0: LDR.W           R3, [SP,#0x9E8]                                       D: [R3: 0xFFFFFFFC] S: [SP: 0xBEF721A8]</span><br><span class="line">(        libdexjni.so[0x9BEDF2D4])0x0002C2D4: LDR             R2, [R7,R2]                                           D: [R2: 0x0] S: [R2: 0x0, R7: 0x9C0FD1C0]</span><br><span class="line">(        libdexjni.so[0x9BEDF2D6])0x0002C2D6: ADD             R0, R1                                                D: [R0: 0x9BF11B70] S: [R1: 0xFFFFFA84]</span><br><span class="line">(        libdexjni.so[0x9BEDF2D8])0x0002C2D8: EOR.W           R1, R2, R6                                            D: [R1: 0xFFFFFA84] S: [R2: 0x89, R6: 0x1000]   ; 0x1000在这里做异或操作</span><br><span class="line">(        libdexjni.so[0x9BEDF2DC])0x0002C2DC: STR.W           R1, [SP,#0x9D4]                                       D: [R1: 0x1089] S: [SP: 0xBEF721A8]             ; 这里看到异或的结果0x1089</span><br><span class="line">(        libdexjni.so[0x9BEDF2E0])0x0002C2E0: MOV.W           R6, #0x10A                                            D: [R6: 0x1000] S: []</span><br><span class="line">(        libdexjni.so[0x9BEDF2E4])0x0002C2E4: LDR.W           R2, [SP,#0x9E4]                                       D: [R2: 0x89] S: [SP: 0xBEF721A8]</span><br><span class="line">(        libdexjni.so[0x9BEDF2E8])0x0002C2E8: UXTB            R1, R1                                                D: [R1: 0x1089] S: [R1: 0x1089]</span><br><span class="line">(        libdexjni.so[0x9BEDF2EA])0x0002C2EA: ADD.W           R0, R0, R1,LSL#2                                      D: [R0: 0x9BF115F4] S: [R0: 0x9BF115F4]</span><br><span class="line">(        libdexjni.so[0x9BEDF2EE])0x0002C2EE: LDR.W           R1, [SP,#0x9F4]                                       D: [R1: 0x89] S: [SP: 0xBEF721A8]</span><br><span class="line">(        libdexjni.so[0x9BEDF2F2])0x0002C2F2: LDR             R0, [R0]                                              D: [R0: 0x9BF11818] S: [R0: 0x9BF11818]</span><br><span class="line">(        libdexjni.so[0x9BEDF2F4])0x0002C2F4: MOV             PC, R0                                                D: [PC: 0x9BEDF2F4] S: [R0: 0x9BEE6DB8]         ; 跳转</span><br></pre></td></tr></table></figure>
+
+<p>断下 GetMethodID ，发现查找的是构造函数，结合 FindClass ，后面的 CallNonvirtualVoidMethodA 是在调用 <code>java/lang/Object</code> 类的 <code>&lt;init&gt;</code> 函数，猜测 insn 前两个字节代表 invoke 指令，结合这篇文章：<a target="_blank" rel="noopener" href="https://doc.yonyoucloud.com/doc/wiki/project/jni-ndk-developer-guide/function2.html">JNI 调用构造方法和父类实例方法</a>，可以知道在 native 层调用父类构造方法用的就是 <code>CallNonvirtualVoidMethodA</code> 这个 jni 函数，进一步确定是 <code>invoke-super</code> 指令。</p>
+<p><img src="12.jpg"></p>
+<p><code>invoke</code> 指令还需要指定参数，比如下图的 <code>invoke-super</code> 使用了 v6 和 v7 寄存器，那么它的指令字节码最后两字节 <code>76 00</code> ，<code>invoke-static</code> 没有使用寄存器，于是最后两字节是 <code>00 00</code> ，而cV 调用的 <code>&lt;init&gt;</code> 函数参数为空，所以第三条指令是 0x0000</p>
+<p><img src="13.jpg"></p>
+<p>最后两个字节 0x0047 ，在 0x35F7C 处搜到 0x47 ，发现也是做了异或得到 0xC0 并且参与跳转地址的计算，所以断定它也是操作码，又因为它是最后一条指令且 cV 返回值为 void ，所以对应的指令是 <code>return-void</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(        libdexjni.so[0x9BEE8F70])0x00035F70: LDRH            R6, [R6]                                              D: [R6: 0xB399E3BE] S: [R6: 0xB399E3BE]         ; 取出最后一条指令</span><br><span class="line">(        libdexjni.so[0x9BEE8F72])0x00035F72: ADD             R0, PC; _GLOBAL_OFFSET_TABLE_                         D: [R0: 0x28BFA] S: [PC: 0x9BEE8F72]</span><br><span class="line">...</span><br><span class="line">(        libdexjni.so[0x9BEE8F7A])0x00035F7A: ADD             R0, R1                                                D: [R0: 0x9BF11B70] S: [R1: 0xFFFFFA84]</span><br><span class="line">(        libdexjni.so[0x9BEE8F7C])0x00035F7C: EOR.W           R1, R2, R6                                            D: [R1: 0xFFFFFA84] S: [R2: 0x87, R6: 0x47]     ; 0x47参与异或</span><br><span class="line">(        libdexjni.so[0x9BEE8F80])0x00035F80: STR.W           R1, [SP,#0x9D4]                                       D: [R1: 0xC0] S: [SP: 0xBEF721A8]</span><br><span class="line">(        libdexjni.so[0x9BEE8F84])0x00035F84: MOV.W           R6, #0x10A                                            D: [R6: 0x47] S: []</span><br><span class="line">(        libdexjni.so[0x9BEE8F88])0x00035F88: LDR.W           R2, [SP,#0x9E4]                                       D: [R2: 0x87] S: [SP: 0xBEF721A8]</span><br><span class="line">(        libdexjni.so[0x9BEE8F8C])0x00035F8C: UXTB            R1, R1                                                D: [R1: 0xC0] S: [R1: 0xC0]</span><br><span class="line">(        libdexjni.so[0x9BEE8F8E])0x00035F8E: ADD.W           R0, R0, R1,LSL#2                                      D: [R0: 0x9BF115F4] S: [R0: 0x9BF115F4]</span><br><span class="line">(        libdexjni.so[0x9BEE8F92])0x00035F92: LDR.W           R1, [SP,#0x9F4]                                       D: [R1: 0xC0] S: [SP: 0xBEF721A8]</span><br><span class="line">(        libdexjni.so[0x9BEE8F96])0x00035F96: LDR             R0, [R0]                                              D: [R0: 0x9BF118F4] S: [R0: 0x9BF118F4]</span><br><span class="line">(        libdexjni.so[0x9BEE8F98])0x00035F98: MOV             PC, R0                                                D: [PC: 0x9BEE8F98] S: [R0: 0x9BEEA558]          ; 跳转</span><br></pre></td></tr></table></figure>
+
+<p>到这里可以推出第一次执行 cV 函数指令的含义以及指令格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">00 10     CB 28      00 00     47 00</span><br><span class="line">opcode    oprand     参数      opcode</span><br></pre></td></tr></table></figure>
+
+<p>再看看第二次执行 cV 函数，0x1069 参与异或运算得到 0x1089 ，0x008B 参与异或运算得到 0x00C0 ，这个第一次执行 cV 函数得到的结果一样，说明传给 vmpEntry 的 insn 中只有 opcode 要做一次异或解密</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">69 10     CB 28      00 00     8B 00               </span><br><span class="line">opcode    oprand     参数      opcode</span><br></pre></td></tr></table></figure>
+
+<p>第四次执行 cV 函数，<code>89 10 CB 28 01 00</code> 跟前面一样是 <code>invoke-super &#123;v1&#125;, Ljava/lang/Object;-&gt;$init</code> ，最后的 <code>C0 00</code> 也是 <code>return-void</code> ，那么 <code>75 00 00 00 F5 10 38 02</code> 是什么还得去看执行了哪些 jni 函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">5B 10 CB 28 01 00 41 00  00 00 DA 10 38 02 9D 00    // 解密前</span><br><span class="line"></span><br><span class="line">89 10 CB 28 01 00 75 00  00 00 F5 10 38 02 C0 00    // 解密后</span><br></pre></td></tr></table></figure>
+<p>本次 vmpEntry 执行了 GetFieldID ，查找类 cn&#x2F;missfresh&#x2F;module&#x2F;base&#x2F;network&#x2F;a&#x2F;i 的域 a ，它是一个 jstring ，接着调用 <code>SetObjectField</code> 给它设置一个 string 值，那么对应的 smali 就是 <code>iput-object</code> ，前面已经得知这个壳的 vmp 指令格式与 Dalvik 虚拟机指令格式相同，那么参考一下格式</p>
+<p><img src="15.jpg"></p>
+<p><code>5b</code> 代表 <code>iput-object</code> ，紧跟着的一字节是寄存器，接着两字节用于索引 field ，回去看 vmp 指令，现在已经确定其中有代表 <code>iput-object</code> 的指令，然后前面得出结论 opcode 会做解密，所以只可能是 <code>75 00</code> 或 <code>F5 10</code> ，又因为它给字符串域赋值，需要先把字符串存在寄存器中，即会有 <code>const-string</code> 指令，那么得出 <code>75 00</code> 是 <code>const-string v0, &quot;xxx&quot;</code> ，<code>F5 10</code> 是 <code>iput-object v0, v1, Lxxx</code> 指令</p>
+<p>其它指令分析类似，先拿到当前执行的指令，trace 整个执行流程，整理出哪几个指令被解密了，这些指令就是 opcode ，再找出调用的 jni 函数，通过 jni 函数可以猜出 smali ，猜不到就参考这个 dex2c 项目：<a target="_blank" rel="noopener" href="https://github.com/amimo/dcc">dcc</a></p>
+<h2 id="指令解密分析"><a href="#指令解密分析" class="headerlink" title="指令解密分析"></a>指令解密分析</h2><p>如果要写脚本修复 vmp 指令，还得找到异或解密 opcode 用到的 key 在哪保存，通过回溯 <code>EOR</code> 指令可知 key地址 &#x3D; [R7 + 当前执行insn地址 - insn基址]</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(        libdexjni.so[0x9BEDF2BE])0x0002C2BE: SUBS            R2, R6, R2                                            D: [R2: 0xB399E3B8] S: [R6: 0xB399E3B8]     ; 当前执行insn地址 - insn基址</span><br><span class="line">(        libdexjni.so[0x9BEDF2C0])0x0002C2C0: LDR.W           R0, =(_GLOBAL_OFFSET_TABLE_ - 0x9BEDF2D2)             D: [R0: 0x0] S: []</span><br><span class="line">(        libdexjni.so[0x9BEDF2C4])0x0002C2C4: LDR.W           R1, =0xFFFFFA84                                       D: [R1: 0x0] S: []</span><br><span class="line">(        libdexjni.so[0x9BEDF2C8])0x0002C2C8: AND.W           R2, R3, R2,LSL#1                                      D: [R2: 0x0] S: [R3: 0xFFFFFFFC]</span><br><span class="line">(        libdexjni.so[0x9BEDF2CC])0x0002C2CC: LDRH            R6, [R6]                                              D: [R6: 0xB399E3B8] S: [R6: 0xB399E3B8]     ; 取insn前两字节</span><br><span class="line">(        libdexjni.so[0x9BEDF2CE])0x0002C2CE: ADD             R0, PC; _GLOBAL_OFFSET_TABLE_                         D: [R0: 0x3289E] S: [PC: 0x9BEDF2CE]</span><br><span class="line">(        libdexjni.so[0x9BEDF2D0])0x0002C2D0: LDR.W           R3, [SP,#0x9E8]                                       D: [R3: 0xFFFFFFFC] S: [SP: 0xBEF721A8]</span><br><span class="line">(        libdexjni.so[0x9BEDF2D4])0x0002C2D4: LDR             R2, [R7,R2]                                           D: [R2: 0x0] S: [R2: 0x0, R7: 0x9C0FD1C0]   ; R7是key表地址</span><br><span class="line">(        libdexjni.so[0x9BEDF2D6])0x0002C2D6: ADD             R0, R1                                                D: [R0: 0x9BF11B70] S: [R1: 0xFFFFFA84]</span><br><span class="line">(        libdexjni.so[0x9BEDF2D8])0x0002C2D8: EOR.W           R1, R2, R6                                            D: [R1: 0xFFFFFA84] S: [R2: 0x89, R6: 0x1000]</span><br></pre></td></tr></table></figure>
+
+<p>再回溯得知 R7 是 key 表地址，由下面这个函数返回，地址计算公式：[[GOT + 0xD8C50 + 0x8] + vmpId * 4]</p>
+<p><img src="14.jpg"></p>
+<p>那么获取解密当前 opcode 的 key 地址的公式：[[[GOT + 0xD8C50 + 0x8] + vmpId * 4] + addr_cur_insn - addr_insn_base]</p>
+<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><hr>
+<p>这个 vmp 壳的分析到这里先结束了，要解析出指令映射表需要很大的精力和时间，虽然同一个版本的指令映射表应该是一样的，但是在内存中的 vmp 指令是加密过的，增加了写 patch 的难度。第一次接触 vmp，也是一边学习别人的方法，一边自己尝试分析，ida 搭配 trace 日志分析 OLLVM 和 vmp 效果不错，可惜 ida 下不了内存断点，地址随机化也给分析带来麻烦，之后看看有没有办法解决这些问题。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://127.0.0.1:4000">d0nuts</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://127.0.0.1:4000/2022/11/24/bangbang%E5%8A%A0%E5%9B%BA%E4%BC%81%E4%B8%9A%E7%89%88%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%8B%EF%BC%89/">http://127.0.0.1:4000/2022/11/24/bangbang%E5%8A%A0%E5%9B%BA%E4%BC%81%E4%B8%9A%E7%89%88%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%8B%EF%BC%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://127.0.0.1:4000" target="_blank">d0nuts</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../../../tags/VMP/">VMP</a></div><div class="post_share"><div class="social-share" data-image="../../../../img/avatar4.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="../../07/bangbang%E5%8A%A0%E5%9B%BA%E4%BC%81%E4%B8%9A%E7%89%88%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%8A%EF%BC%89/" title="bangbang加固企业版分析（上）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">bangbang加固企业版分析（上）</div></div></a></div><div class="next-post pull-right"><a href="../../25/archlinux%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%90%AD%E5%BB%BAandroid%E9%80%86%E5%90%91%E7%8E%AF%E5%A2%83/" title="Archlinux虚拟机搭建Android逆向环境"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Archlinux虚拟机搭建Android逆向环境</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">分析环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%B1%82vmp%E5%85%A5%E5%8F%A3"><span class="toc-number">2.</span> <span class="toc-text">Java层vmp入口</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JNI-OnLoad"><span class="toc-number">3.</span> <span class="toc-text">JNI_OnLoad</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cV%E5%87%BD%E6%95%B0"><span class="toc-number">4.</span> <span class="toc-text">cV函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%BE%E5%88%B0codeItem"><span class="toc-number">4.1.</span> <span class="toc-text">找到codeItem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E5%88%86%E6%9E%90"><span class="toc-number">4.2.</span> <span class="toc-text">指令分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E8%A7%A3%E5%AF%86%E5%88%86%E6%9E%90"><span class="toc-number">4.3.</span> <span class="toc-text">指令解密分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E6%9D%9F"><span class="toc-number">5.</span> <span class="toc-text">结束</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By d0nuts</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="../../../../js/utils.js"></script><script src="../../../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'sVelT3UmjU4nZ5qyVXOfxMzi-MdYXbMMI',
+      appKey: 'kpRNH8f1Ayf1ZWoEo3NZwi2o',
+      avatar: 'monsterid',
+      serverURLs: 'https://svelt3um.api.lncldglobal.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div><script src="js/search/local-search.js"></script></div></body></html>

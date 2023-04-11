@@ -1,0 +1,313 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>Archlinux虚拟机搭建Android逆向环境 | d0nuts</title><meta name="author" content="d0nuts"><meta name="copyright" content="d0nuts"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="r0env 作为 android 逆向环境已经相当完美了，之所以还要折腾 Archlinux 搭建新环境只是觉得 kali 上自带的各种渗透工具都是我不需要的，而我这种洁癖无法忍受这一点，于是找到这个最干净（可能）的 linux 系统，从零开始搭建，同时整理出这篇备忘文章。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Archlinux虚拟机搭建Android逆向环境">
+<meta property="og:url" content="http://127.0.0.1:4000/2022/11/25/archlinux%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%90%AD%E5%BB%BAandroid%E9%80%86%E5%90%91%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="d0nuts">
+<meta property="og:description" content="r0env 作为 android 逆向环境已经相当完美了，之所以还要折腾 Archlinux 搭建新环境只是觉得 kali 上自带的各种渗透工具都是我不需要的，而我这种洁癖无法忍受这一点，于是找到这个最干净（可能）的 linux 系统，从零开始搭建，同时整理出这篇备忘文章。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://127.0.0.1:4000/img/avatar4.jpg">
+<meta property="article:published_time" content="2022-11-25T11:54:09.000Z">
+<meta property="article:modified_time" content="2023-04-10T16:04:40.800Z">
+<meta property="article:author" content="d0nuts">
+<meta property="article:tag" content="环境搭建">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://127.0.0.1:4000/img/avatar4.jpg"><link rel="shortcut icon" href="../../../../img/avatar4.jpg"><link rel="canonical" href="http://127.0.0.1:4000/2022/11/25/archlinux%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%90%AD%E5%BB%BAandroid%E9%80%86%E5%90%91%E7%8E%AF%E5%A2%83/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Archlinux虚拟机搭建Android逆向环境',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-11 00:04:40'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar4.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('../../../../img/Yuru-Camp.jpg')"><nav id="nav"><span id="blog-info"><a href="index.html" title="d0nuts"><span class="site-name">d0nuts</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="http://127.0.0.1:4000/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Archlinux虚拟机搭建Android逆向环境</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-11-25T11:54:09.000Z" title="发表于 2022-11-25 19:54:09">2022-11-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-10T16:04:40.800Z" title="更新于 2023-04-11 00:04:40">2023-04-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/Android%E9%80%86%E5%90%91/">Android逆向</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>r0env 作为 android 逆向环境已经相当完美了，之所以还要折腾 Archlinux 搭建新环境只是觉得 kali 上自带的各种渗透工具都是我不需要的，而我这种洁癖无法忍受这一点，于是找到这个最干净（可能）的 linux 系统，从零开始搭建，同时整理出这篇备忘文章。</p>
+<span id="more"></span>
+
+
+<h1 id="前期配置"><a href="#前期配置" class="headerlink" title="前期配置"></a>前期配置</h1><hr>
+<p>首先从官网下载镜像，找到 China 那块随便找一个仓库下就行：<a target="_blank" rel="noopener" href="https://archlinux.org/download/">iso下载地址</a><br>创建虚拟机没什么好说的，操作系统版本选择”其他Linux”，硬盘大小给的 70G ，网络适配器选择 NAT（桥接也行，需要配置一下静态 ip ），然后创建完成后进入虚拟机设置-&gt;选项-&gt;高级-&gt;固件类型选择UEFI</p>
+<p><img src="1.jpg"></p>
+<h1 id="系统安装"><a href="#系统安装" class="headerlink" title="系统安装"></a>系统安装</h1><hr>
+<p>开始安装系统，进入到 shell 界面后发现无法复制粘贴指令，使用宿主机的 cmder 自带的 ssh 连进虚拟机，先敲 <code>passwd root</code> 修改 root 的密码，然后敲 <code>ip addr</code> 命令查看自动分配的 ip ，最后再在 cmder 敲 <code>ssh root@&lt;your-ip&gt;</code></p>
+<h2 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h2><p>创建分区的过程参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/lxyoucan/article/details/115226297">2021年vmware安装archlinux</a><br>我自己创建了三个分区，第一个是 EFI ，第二个是 swap ，最后一个分区就是给根目录&#x2F;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Device       Start       End   Sectors  Size Type</span><br><span class="line">/dev/sda1     2048    616447    614400  300M EFI System</span><br><span class="line">/dev/sda2   616448   4810751   4194304    2G Linux swap</span><br><span class="line">/dev/sda3  4810752 146798591 141987840 67.7G Linux filesystem</span><br></pre></td></tr></table></figure>
+<p>格式化分区</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mkfs.fat -F 32 /dev/sda1    <span class="comment"># 格式化EFI系统分区</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mkswap /dev/sda2            <span class="comment"># 格式化swap分区</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mkfs.ext4 /dev/sda3         <span class="comment"># 格式化根目录分区</span></span>  </span><br></pre></td></tr></table></figure>
+<p>挂载分区</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mount /dev/sda3 /mnt        <span class="comment"># 先挂载根目录</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> /mnt/boot</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mount /dev/sda1 /mnt/boot   <span class="comment"># 挂载EFI</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">swapon /dev/sda2            <span class="comment"># 挂载交换分区</span></span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="安装必要软件包"><a href="#安装必要软件包" class="headerlink" title="安装必要软件包"></a>安装必要软件包</h2><p>修改 <code>/etc/pacman.d/mirrorlist</code> ，添加下面两项到顶部</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch</span><br><span class="line">Server = https://mirrors.hit.edu.cn/archlinux/$repo/os/$arch</span><br></pre></td></tr></table></figure>
+<p>安装真实系统所需的软件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pacstrap /mnt base linux linux-firmware vim sudo dhcpcd bash-completion</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="生成fstab"><a href="#生成fstab" class="headerlink" title="生成fstab"></a>生成fstab</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="安装引导程序"><a href="#安装引导程序" class="headerlink" title="安装引导程序"></a>安装引导程序</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">arch-chroot /mnt         <span class="comment"># 进入安装的新系统</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pacman -S grub efibootmgr</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">grub-mkconfig -o /boot/grub/grub.cfg</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="本地化"><a href="#本地化" class="headerlink" title="本地化"></a>本地化</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ln</span> -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime     <span class="comment"># 修改时区</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">hwclock --systohc</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vim /etc/locale.gen      <span class="comment"># 本地化，去掉en_US.UTF-8 UTF-8行以及 zh_CN.UTF-8 UTF-8的注释符号</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">locale-gen</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&#x27;LANG=en_US.UTF-8&#x27;</span>  &gt; /etc/locale.conf</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">passwd root         <span class="comment"># 先设置密码</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">exit</span>                <span class="comment"># 退回安装环境#</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">umount -R  /mnt     <span class="comment"># 卸载新分区</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">reboot              <span class="comment"># 重启</span></span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="配置网络"><a href="#配置网络" class="headerlink" title="配置网络"></a>配置网络</h2><p>重启后就进入到真实的系统中了，首先需要为其配置网络</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">systemctl <span class="built_in">enable</span> dhcpcd  <span class="comment">#设置开机启动</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">systemctl start dhcpcd  <span class="comment">#立即启动dhcp</span></span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="设置源"><a href="#设置源" class="headerlink" title="设置源"></a>设置源</h2><p>修改 <code>/etc/pacman.d/mirrorlist</code> ，添加下面两项到顶部</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch</span><br><span class="line">Server = https://mirrors.hit.edu.cn/archlinux/$repo/os/$arch</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="安装openssh"><a href="#安装openssh" class="headerlink" title="安装openssh"></a>安装openssh</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pacman -S openssh</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vim /etc/ssh/sshd_config        <span class="comment"># 修改允许root登录：PermitRootLogin yes</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">systemctl <span class="built_in">enable</span> sshd.service</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">systemctl start sshd.service</span></span><br></pre></td></tr></table></figure>
+<p>到这一步，一个纯净的不带界面的系统已经安装完成了，可以打个快照</p>
+<h2 id="图形界面安装"><a href="#图形界面安装" class="headerlink" title="图形界面安装"></a>图形界面安装</h2><p>安装显卡驱动，需要先查表</p>
+<p><img src="arch-driver.jpg"></p>
+<p>以 intel 为例：<code>pacman -S xf86-video-intel</code><br>添加新用户，欢迎界面的可选用户不能是 root</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">useradd -m &lt;user-name&gt;</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">passwd &lt;user-name&gt;</span></span><br></pre></td></tr></table></figure>
+<p>将用户添加到 sudo 文件：<code>vim /etc/sudoers</code><br>在 <code>root    ALL=(ALL)       ALL </code> 下面一行添加 <code>&lt;user-name&gt;  ALL=(ALL)       ALL</code></p>
+<p>开启 multilib 支持，到 &#x2F;etc&#x2F;pacman.conf ，取消下面两句的注释</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[multilib]</span><br><span class="line">Include = /etc/pacman.d/mirrorlist</span><br></pre></td></tr></table></figure>
+<p>继续在 &#x2F;etc&#x2F;pacman.conf 末尾添加 Arch Linux 中文社区仓库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[archlinuxcn]</span><br><span class="line">Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch</span><br></pre></td></tr></table></figure>
+<p>安装 KDE Plasma 桌面环境</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pacman -Syyu              <span class="comment"># 更新一下仓库</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pacman -S plasma-meta konsole dolphin</span>     </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">systemctl <span class="built_in">enable</span> sddm     <span class="comment"># 开启sddm守护进程</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">reboot                    <span class="comment"># 重启后就能看到图形界面</span></span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="自适应窗口"><a href="#自适应窗口" class="headerlink" title="自适应窗口"></a>自适应窗口</h2><p>一般来说在虚拟机里面安装 VMware tools 就能解决窗口自适应的问题，但 Archlinux 好像对 VMware tools 的支持不太好，最后我是参考这篇文章解决的：<a target="_blank" rel="noopener" href="http://blog.ccyg.studio/article/4a73a69f-2aaf-4c50-89a8-0bdd0149f7d8/">VMWare 自动适配 Archlinux 分辨率</a></p>
+<h2 id="拖拽与复制粘贴"><a href="#拖拽与复制粘贴" class="headerlink" title="拖拽与复制粘贴"></a>拖拽与复制粘贴</h2><p>虚拟机与宿主机之间的复制粘贴</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pacman -S open-vm-tools</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pacman -S gtkmm</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">reboot</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="中文输入法"><a href="#中文输入法" class="headerlink" title="中文输入法"></a>中文输入法</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo systemctl <span class="built_in">enable</span> --now NetworkManager        <span class="comment"># 先把桌面环境下的网络管理器跑起</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pacman -S wqy-zenhei       <span class="comment"># 安装文泉驿中文字体</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pacman -S fcitx5-im</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pacman -S fcitx5-chinese-addons</span></span><br></pre></td></tr></table></figure>
+<p>编辑 <code>/etc/environment</code> ，添加下面的内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">INPUT_METHOD=fcitx5</span><br><span class="line">GTK_IM_MODULE=fcitx5</span><br><span class="line">QT_IM_MODULE=fcitx5</span><br><span class="line">XMODIFIERS=\@im=fcitx5</span><br><span class="line">SDL_IM_MODULE=fcitx</span><br></pre></td></tr></table></figure>
+<p>接着添加中文输入法 <code>settings</code> &gt; <code>Regional Settings</code> &gt; <code>Input Method</code></p>
+<p><img src="3.jpg"></p>
+<p><img src="4.jpg"></p>
+<p>之后按 <code>ctrl + space</code> 切换中文输入法</p>
+<h2 id="安装paru（AUR助手）"><a href="#安装paru（AUR助手）" class="headerlink" title="安装paru（AUR助手）"></a>安装paru（AUR助手）</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pacman -Syu</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pacman -S archlinuxcn-keyring  <span class="comment"># 更新GPG密钥</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pacman -S paru</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="安装常用工具"><a href="#安装常用工具" class="headerlink" title="安装常用工具"></a>安装常用工具</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pacman -S base-devel         <span class="comment"># 基础命令（which、find和grep）</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pacman -S chromium           <span class="comment"># chrome浏览器</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pacman -S scrcpy</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">paru -S visual-studio-code-bin</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">paru -S htop                      <span class="comment"># 内存进程监控</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">paru -S jnettop                   <span class="comment"># 网络监控</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">paru -S ark                       <span class="comment"># 压缩工具</span></span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="zsh-安装和配置"><a href="#zsh-安装和配置" class="headerlink" title="zsh 安装和配置"></a>zsh 安装和配置</h2><p>安装zsh：<a target="_blank" rel="noopener" href="https://arch.icekylin.online/advanced/optional-cfg-1.html#%F0%9F%9A%80-zsh">archlinux 简明指南</a></p>
+<p>安装 zsh 后按键 Home 和 End 失效：<a target="_blank" rel="noopener" href="https://conanblog.me/blog/2012/08/20/resolve-zsh-home-and-end-key-problem/">解决办法</a></p>
+<p>修改 zsh prompt 格式，添加下面内容到 ~&#x2F;.zshrc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">autoload -U colors &amp;&amp; colors</span><br><span class="line">PS1=&quot;%&#123;$fg[red]%&#125;%n%&#123;$reset_color%&#125;@%&#123;$fg[blue]%&#125;%m %&#123;$fg[yellow]%&#125;%~ %&#123;$reset_color%&#125;%% &quot;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="逆向环境安装"><a href="#逆向环境安装" class="headerlink" title="逆向环境安装"></a>逆向环境安装</h1><hr>
+<h2 id="安装jadx"><a href="#安装jadx" class="headerlink" title="安装jadx"></a>安装jadx</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">paru -S jadx-bin</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="010editor"><a href="#010editor" class="headerlink" title="010editor"></a>010editor</h2><p>这样安装的只是30天试用版，也可以用52盘的破解版<br><code>paru -S 010editor</code></p>
+<h2 id="python环境"><a href="#python环境" class="headerlink" title="python环境"></a>python环境</h2><p>安装 pyenv 以及 python2 和 python3</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sudo pacman -S pyenv</span><br><span class="line">$ wget &quot;https://mirrors.huaweicloud.com/python/2.7.18/Python-2.7.18.tar.xz&quot; -P ~/.pyenv/cache/; pyenv install 2.7.18</span><br><span class="line">$ wget &quot;https://mirrors.huaweicloud.com/python/3.8.0/Python-3.8.0.tar.xz&quot; -P ~/.pyenv/cache/; pyenv install 3.8.0</span><br><span class="line">$ wget &quot;https://mirrors.huaweicloud.com/python/3.8.5/Python-3.8.5.tar.xz&quot; -P ~/.pyenv/cache/; pyenv install 3.8.5</span><br></pre></td></tr></table></figure>
+<p>配置 pyenv shell 环境<br><code>pyenv init</code><br>init 后会提示在 <code>~/.bashrc</code> 或 <code>~/.zshrc</code> 写入下面内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PYENV_ROOT=&quot;$HOME/.pyenv&quot;</span><br><span class="line">command -v pyenv &gt;/dev/null || export PATH=&quot;$PYENV_ROOT/bin:$PATH&quot;</span><br><span class="line">eval &quot;$(pyenv init -)&quot;</span><br></pre></td></tr></table></figure>
+<p>重启 shell 环境<br><code>source ~/.zshrc</code><br>切换到拥有 python3.8.5 的环境，这个环境同时拥有 pip3<br><code>pyenv shell 3.8.5</code></p>
+<h2 id="charles"><a href="#charles" class="headerlink" title="charles"></a>charles</h2><p>使用 <code>paru -S charles</code> 安装报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Error: A JNI error has occurred, please check your installation and try again</span><br><span class="line">Exception in thread &quot;main&quot; java.lang.UnsupportedClassVersionError: com/xk72/charles/gui/MainWithClassLoader has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0</span><br></pre></td></tr></table></figure>
+<p>查看所有 jdk 版本：<code>archlinux-java status</code><br>我的显示如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Available Java environments:</span><br><span class="line">  java-19-openjdk</span><br><span class="line">  java-8-openjdk (default)</span><br></pre></td></tr></table></figure>
+<p>切换 jdk 版本，不使用 java-8-openjdk ：<br><code>sudo archlinux-java set java-19-openjdk</code><br>如果没有就安装一个：<code>sudo pacman -S jre-openjdk</code><br>最后再用 paru 重新安装 charles</p>
+<h2 id="nodejs"><a href="#nodejs" class="headerlink" title="nodejs"></a>nodejs</h2><p>安装 nvm ，用于 nodejs 版本管理</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">paru -S nvm</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&#x27;source /usr/share/nvm/init-nvm.sh&#x27;</span> &gt;&gt; ~/.bashrc   <span class="comment"># 如果是zshell就执行：echo &#x27;source /usr/share/nvm/init-nvm.sh&#x27; &gt;&gt; ~/.zshrc</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">source</span> ~/.zshrc</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">nvm ls-remote   <span class="comment"># 查看可用的node版本</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">nvm install v16.18.1    <span class="comment"># 我选择了16.18.1</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">nvm use v16.18.1    <span class="comment"># 切换版本</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">nvm current         <span class="comment"># 查看当前版本</span></span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="frida"><a href="#frida" class="headerlink" title="frida"></a>frida</h2><p>假设前面正确配置 pyenv 环境</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pyenv <span class="built_in">local</span> 3.8.5</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pip install frida==14.2.18</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pip install frida-tools==9.2.4</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pip install objection==1.11.0</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pyenv <span class="built_in">local</span> 3.8.0</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pip install frida==12.8.0</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pip install frida-tools==5.3.0</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pip install objection==1.8.4</span></span><br></pre></td></tr></table></figure>
+
+<p>frida 项目开发环境</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> git://github.com/oleavr/frida-agent-example.git</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> frida-agent-example/</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">npm install --registry=https://registry.npm.taobao.org</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">npm install --save @types/frida-gum     <span class="comment"># 编辑时有代码提示</span></span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="android-studio"><a href="#android-studio" class="headerlink" title="android studio"></a>android studio</h2><p>使用 AUR 下载的是最新版，我想找个老版本的<br>访问↓网址选择一个版本然后 wget 即可<br><a target="_blank" rel="noopener" href="https://developer.android.com/studio/archive">https://developer.android.com/studio/archive</a></p>
+<p>添加别名，之后用 <code>as</code> 命令就能启动</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">/etc/profile</span></span><br><span class="line">export ANDROID_STUDIO_PATH=/path/to/android-studio</span><br><span class="line">alias as=&#x27;bash $ANDROID_STUDIO_PATH/bin/studio.sh&#x27;</span><br></pre></td></tr></table></figure>
+<p>最后 source 一下<br><code>source /etc/profile</code></p>
+<h2 id="jeb"><a href="#jeb" class="headerlink" title="jeb"></a>jeb</h2><p>找了半天不是跑不了，就是 license 过期，最后找到这个可以用的：<a target="_blank" rel="noopener" href="https://www.52pojie.cn/forum.php?mod=viewthread&tid=1699523&highlight=jeb">jeb下载地址</a></p>
+<p>解压后执行 <code>jeb_linux</code> ，显示下图窗口，点击 <code>Generate a Key</code> ，然后点击 <code>Continue</code> 即可</p>
+<p><img src="5.jpg"></p>
+<h1 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h1><p>建立 <code>ll</code> 命令，在 <code>/etc/profile</code> 添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias ll=&#x27;ls -al&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>安装 scrcpy<br><code>sudo pacman -S scrcpy</code></p>
+<p>修改全局字体大小，全改成 12px<br><code>Setting</code> -&gt; <code>Appearance</code> -&gt; <code>Fonts</code></p>
+<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><hr>
+<p>这一套搭建下来太麻烦了，不过成品效果还不错</p>
+<p><img src="6.jpg"></p>
+<p>ida 和 hyperpwn 有点难搞，就不装上去了，暂时先用着这些，以后有什么问题再说。。。累死</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://127.0.0.1:4000">d0nuts</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://127.0.0.1:4000/2022/11/25/archlinux%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%90%AD%E5%BB%BAandroid%E9%80%86%E5%90%91%E7%8E%AF%E5%A2%83/">http://127.0.0.1:4000/2022/11/25/archlinux%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%90%AD%E5%BB%BAandroid%E9%80%86%E5%90%91%E7%8E%AF%E5%A2%83/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://127.0.0.1:4000" target="_blank">d0nuts</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../../../tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a></div><div class="post_share"><div class="social-share" data-image="../../../../img/avatar4.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="../../24/bangbang%E5%8A%A0%E5%9B%BA%E4%BC%81%E4%B8%9A%E7%89%88%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%8B%EF%BC%89/" title="bangbang加固企业版分析（下）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">bangbang加固企业版分析（下）</div></div></a></div><div class="next-post pull-right"><a href="../../../12/28/%E7%BC%96%E8%AF%91Android%E5%86%85%E6%A0%B8%E5%88%9D%E6%AD%A5%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/" title="编译Android内核初步绕过反调试"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">编译Android内核初步绕过反调试</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../../../12/28/%E7%BC%96%E8%AF%91Android%E5%86%85%E6%A0%B8%E5%88%9D%E6%AD%A5%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/" title="编译Android内核初步绕过反调试"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-28</div><div class="title">编译Android内核初步绕过反调试</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E6%9C%9F%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">前期配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">系统安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%8C%BA"><span class="toc-number">2.1.</span> <span class="toc-text">分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="toc-number">2.2.</span> <span class="toc-text">安装必要软件包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90fstab"><span class="toc-number">2.3.</span> <span class="toc-text">生成fstab</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F"><span class="toc-number">2.4.</span> <span class="toc-text">安装引导程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E5%8C%96"><span class="toc-number">2.5.</span> <span class="toc-text">本地化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E5%90%AF"><span class="toc-number">2.6.</span> <span class="toc-text">重启</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C"><span class="toc-number">2.7.</span> <span class="toc-text">配置网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%BA%90"><span class="toc-number">2.8.</span> <span class="toc-text">设置源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85openssh"><span class="toc-number">2.9.</span> <span class="toc-text">安装openssh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2%E5%AE%89%E8%A3%85"><span class="toc-number">2.10.</span> <span class="toc-text">图形界面安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E9%80%82%E5%BA%94%E7%AA%97%E5%8F%A3"><span class="toc-number">2.11.</span> <span class="toc-text">自适应窗口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%96%E6%8B%BD%E4%B8%8E%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4"><span class="toc-number">2.12.</span> <span class="toc-text">拖拽与复制粘贴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E6%96%87%E8%BE%93%E5%85%A5%E6%B3%95"><span class="toc-number">2.13.</span> <span class="toc-text">中文输入法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85paru%EF%BC%88AUR%E5%8A%A9%E6%89%8B%EF%BC%89"><span class="toc-number">2.14.</span> <span class="toc-text">安装paru（AUR助手）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">2.15.</span> <span class="toc-text">安装常用工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zsh-%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE"><span class="toc-number">2.16.</span> <span class="toc-text">zsh 安装和配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%86%E5%90%91%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">逆向环境安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85jadx"><span class="toc-number">3.1.</span> <span class="toc-text">安装jadx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#010editor"><span class="toc-number">3.2.</span> <span class="toc-text">010editor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#python%E7%8E%AF%E5%A2%83"><span class="toc-number">3.3.</span> <span class="toc-text">python环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#charles"><span class="toc-number">3.4.</span> <span class="toc-text">charles</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nodejs"><span class="toc-number">3.5.</span> <span class="toc-text">nodejs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#frida"><span class="toc-number">3.6.</span> <span class="toc-text">frida</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#android-studio"><span class="toc-number">3.7.</span> <span class="toc-text">android studio</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jeb"><span class="toc-number">3.8.</span> <span class="toc-text">jeb</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B6%E5%AE%83"><span class="toc-number">4.</span> <span class="toc-text">其它</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E6%9D%9F"><span class="toc-number">5.</span> <span class="toc-text">结束</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By d0nuts</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="../../../../js/utils.js"></script><script src="../../../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'sVelT3UmjU4nZ5qyVXOfxMzi-MdYXbMMI',
+      appKey: 'kpRNH8f1Ayf1ZWoEo3NZwi2o',
+      avatar: 'monsterid',
+      serverURLs: 'https://svelt3um.api.lncldglobal.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div><script src="js/search/local-search.js"></script></div></body></html>
